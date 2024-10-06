@@ -4,24 +4,46 @@ using UnityEngine;
 using TMPro;
 
 public class CurrencyManager : MonoBehaviour {
+    public static CurrencyManager instance;
 
-/*    public TextMeshProUGUI scoreText;
-    int score = 0;*/
+    public TextMeshProUGUI currencyText;
+    private int currency = 0;
 
-    void Start() {
-        //UpdateScoreUI();
+    private void Awake() {
+        if (instance == null) {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        } else {
+            Destroy(gameObject);
+        }
     }
 
-
-    void Update() {
-
-    }
-    public void GainScore() {
-/*        score++;
-        UpdateScoreUI();*/
+    public void IncreaseCurrency(int amount) {
+        currency += amount;
+        UpdateCurrencyUI();
     }
 
-    private void UpdateScoreUI() {
-        //scoreText.text = "Splatted: " + score.ToString();
+    public bool SpendCurrency(int amount) {
+        if (currency >= amount) {
+            currency -= amount;
+            UpdateCurrencyUI();  // Update the UI after spending
+            return true;
+        } else {
+            Debug.Log("Not enough currency!");
+            return false;
+        }
+    }
+
+    public int GetCurrency() {
+        return currency;
+    }
+
+    private void UpdateCurrencyUI() {
+        currencyText.text = "Currency: $" + currency;
+    }
+
+    public void ResetCurrency() {
+        currency = 0;
+        UpdateCurrencyUI();
     }
 }

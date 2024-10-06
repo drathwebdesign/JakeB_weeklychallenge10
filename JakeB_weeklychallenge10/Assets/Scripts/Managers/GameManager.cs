@@ -2,39 +2,51 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
+    public GameObject gameOverCanvas;
+    public GameObject mainCanvas;
+    public TextMeshProUGUI timerText;
+    public float gameDuration = 300f;
 
-    public static GameManager instance;
-    //defaults to false
-/*    public bool isGameOver;
+    private float timeRemaining;
+    private bool isGameActive = true;
 
-    public int lives = 3;
-    private int currentLives;
-    public Image healthImage;*/
+    private void Start() {
+        gameOverCanvas.SetActive(false);
+        timeRemaining = gameDuration;
+        UpdateTimerUI();
+    }
 
-    private void Awake() {
-        if (instance == null) {
-            instance = this;
+    private void Update() {
+        if (isGameActive) {
+            if (timeRemaining > 0) {
+                timeRemaining -= Time.deltaTime;
+                UpdateTimerUI();
+            } else {
+                timeRemaining = 0;
+                EndGame();
+            }
         }
     }
 
-    void Start() {
-/*        Cursor.visible = false;
-        currentLives = lives;
-        UpdateHealthUI();*/
+    private void UpdateTimerUI() {
+        int minutes = Mathf.FloorToInt(timeRemaining / 60);
+        int seconds = Mathf.FloorToInt(timeRemaining % 60);
+        timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
-    void Update() {
-        //if (currentLives <= 0) isGameOver = true;
+    private void EndGame() {
+        isGameActive = false;
+        gameOverCanvas.SetActive(true);
+        Time.timeScale = 0f;
+        mainCanvas.SetActive(false);
     }
 
-    public void LoseLife() {
-/*        currentLives--;
-        UpdateHealthUI();*/
-    }
-    private void UpdateHealthUI() {
-        // Update the fill amount of the health bar
-        //healthImage.fillAmount = (float)currentLives / lives / 3.3f;
+    public void ResetGame() {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

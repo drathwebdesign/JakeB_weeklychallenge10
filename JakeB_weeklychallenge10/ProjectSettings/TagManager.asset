@@ -5,16 +5,22 @@ TagManager:
   serializedVersion: 2
   tags:
   - Soil
+  - Plant
+  - Harvester
+  - Tractor
+  - Enemy
+  - Ally
+  - Planted
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
-  - 
-  - 
+  - IgnoreNavMesh
+  - Plant
+  - Ground
   - 
   - 
   - 
